@@ -6,7 +6,7 @@ export default function CardForm({ addCity }) {
         name: "",
         description: "",
         imgURL: "",
-        isVisited: true,
+        isVisited: false,
     })
 
     const handleInputChange = (e) => {
@@ -27,7 +27,16 @@ export default function CardForm({ addCity }) {
             imgURL: formData.imgURL,
             isVisited: formData.isVisited,
         };
-        addCity(city)
+
+
+        setFormData({
+            name: "",
+            description: "",
+            imgURL: "",
+            isVisited: false,
+        })
+
+        addCity(city);
     }
     return (
         <form onSubmit={handleSubmit} style={{ color: "white" }} className="flex flex-col gap-3 w-80 mb-10 bg-zinc-900 p-5 rouded-lg">
