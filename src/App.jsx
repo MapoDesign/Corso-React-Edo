@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useReducer, useState } from 'react'
 import './App.css'
 import Card from './components/Card'
 import CardForm from './components/CardForm';
+import Exemple from './components/Exemple';
 
 function handleClick() {
   alert("Ciao")
@@ -48,14 +49,40 @@ function App() {
     setCities([...cities, city])
   }
 
+  function formReducer(state, action) {
+    switch (action.type) {
+      case "CHANGE_FIELD":
+        return { ...state, [action.field]: action.value };
+
+      case "RESET_FORM":
+        return { name: '', email: '' };
+
+      default:
+        return state;
+    }
+  }
+
+  const [formState, dispatchFormState] = useReducer(formReducer, { name: '', email: '' })
+
+  const handleFieldChange = (field, value) => {
+    dispatchFormState({ type: "CHANGE_FIELD", field, value })
+  }
+
+  const resetForm = (e) => {
+    e.preventDefault()
+    dispatchFormState({ type: "RESET_FORM" })
+  }
+
+  const sendForm = (e) => {
+    e.preventDefault()
+    console.log(formState);
+  }
 
   return (
     <>
+      <Exemple />
 
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
         <button onClick={handleClick}>
           alert
         </button>
@@ -81,6 +108,19 @@ function App() {
           </Card>
         ))
       }
+
+      <form>
+        <div>
+          <label htmlFor="name">Nome: </label>
+          <input type="text" name="name" id="name" value={formState.name} onChange={(e) => handleFieldChange('name', e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="email">Email: </label>
+          <input type="email" name="email" id="email" value={formState.email} onChange={(e) => handleFieldChange('email', e.target.value)} />
+        </div>
+        <button onClick={resetForm}>RESET</button>
+        <button onClick={sendForm}>INVIA</button>
+      </form>
     </>
   )
 }
