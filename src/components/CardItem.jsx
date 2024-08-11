@@ -1,4 +1,4 @@
-export default function Card({ title, isVisited, imgURL, children }) {
+export default function CardItem({ title, isVisited, imgURL, children }) {
     return <div className="flex flex-col rounded-md bg-zinc-950">
         <div className="p-4" style={{ color: "white" }}>
             <img src={imgURL} alt={title} width="500" />

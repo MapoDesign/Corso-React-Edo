@@ -1,14 +1,11 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { ProvaContext } from "./proveders/provaContext";
 
 export default function Exemple() {
 
-    const [count, setCount] = useState(0);
+    const { count, setCount } = useContext(ProvaContext)
 
-    useEffect(() => {
-        localStorage.setItem('count', count.toString())
-        document.title = `Conteggio ${count}`;
-        console.log('useEffect');
-    }, [count]);
+
 
     return (
         <div>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ProvaContext } from "./proveders/provaContext";
 
 export default function CardForm({ addCity }) {
 
@@ -8,6 +9,8 @@ export default function CardForm({ addCity }) {
         imgURL: "",
         isVisited: false,
     })
+
+    const { count } = useContext(ProvaContext)
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -45,7 +48,7 @@ export default function CardForm({ addCity }) {
                 <input type="text" name="name" value={formData.name} onChange={handleInputChange} style={{ color: "grey" }} />
             </div>
             <div className="flex flex-col">
-                <label>Descrizione</label>
+                <label>Descrizione {count}</label>
                 <input type="text" name="description" value={formData.description} onChange={handleInputChange} style={{ color: "grey" }} />
             </div>
             <div className="flex flex-col">

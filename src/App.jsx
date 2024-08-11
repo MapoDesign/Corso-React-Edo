@@ -1,8 +1,12 @@
-import { useReducer, useState } from 'react'
+import { useReducer, useState, useEffect } from 'react'
 import './App.css'
-import Card from './components/Card'
+
 import CardForm from './components/CardForm';
 import Exemple from './components/Exemple';
+import { ProvaContext } from './components/proveders/provaContext';
+import NavBar from './components/NavBar';
+import CardItem from './components/CardItem';
+
 
 function handleClick() {
   alert("Ciao")
@@ -19,7 +23,11 @@ function handleSubmit(e) {
 
 
 function App() {
+  const URLfetch = 'https://jsonplaceholder.typicode.com/posts';
+
   const [count, setCount] = useState(0);
+  const [data, setData] = useState([]);
+
 
   const [cities, setCities] = useState([
     {
@@ -69,7 +77,7 @@ function App() {
   }
 
   const resetForm = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatchFormState({ type: "RESET_FORM" })
   }
 
@@ -78,10 +86,16 @@ function App() {
     console.log(formState);
   }
 
-  return (
-    <>
-      <Exemple />
+  useEffect(() => {
+    fetch(URLfetch)
+      .then((response) => response.json()
+        .then((data) => { setData(data); console.log(data); })
+      )
+  }, [])
 
+  return (
+    <ProvaContext.Provider value={{ count, setCount }}>
+      <Exemple />
       <div className="card">
         <button onClick={handleClick}>
           alert
@@ -98,16 +112,31 @@ function App() {
 
       {
         cities.map((city) => (
-          <Card
+          <CardItem
             key={city.id}
             title={city.name}
             isVisited={city.isVisited}
             imgURL={city.imgURL}
           >
             {city.descripion}
-          </Card>
+          </CardItem>
         ))
       }
+
+      <div className='grid grid-cols-4 gap-5'>
+        {
+          data.map((item) => (
+            <div
+              key={item.id}
+              className='bg-slate-400 rounded-lg p-3'
+            >
+              <p>userid: {item.userId}</p>
+              <h2 className='text-blue-500'>{item.title}</h2>
+              <p>{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
 
       <form>
         <div>
@@ -121,7 +150,7 @@ function App() {
         <button onClick={resetForm}>RESET</button>
         <button onClick={sendForm}>INVIA</button>
       </form>
-    </>
+    </ProvaContext.Provider>
   )
 }
 
